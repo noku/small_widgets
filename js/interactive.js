@@ -54,7 +54,7 @@ $(function() {
     // be fetched from a server or other resource available
     var data = [], data2 = [], totalPoints = 500, ypoints = 100;
 
-    var updateInterval = 1000;  //Fetch data ever x milliseconds
+    var updateInterval = 30;  //Fetch data ever x milliseconds
     var realtime = "on";        //If == to on then fetch data every x seconds. else stop fetching
 
     // hard-code color indices to prevent them from shifting as
@@ -110,25 +110,6 @@ $(function() {
         }
     });
 
-    function update_line() {
-
-        var data = [];
-
-        choiceContainer.find("input:checked").each(function () {
-          var key = $(this).attr("name");
-          if (key && getRandomData()[key]) {
-            data.push(getRandomData()[key]);
-          }
-        });
-
-        line_interactive.setData(data);
-
-        // Since the axes don't change, we don't need to call plot.setupGrid()
-        line_interactive.draw();
-        if (realtime === "on")
-            setTimeout(update_line, updateInterval);
-    }
-
     // Enable connection between the two graphs
     $("#line-chart").bind("plotselected", function (event, ranges) {
 
@@ -144,7 +125,7 @@ $(function() {
 
       // don't fire event on the overview to prevent eternal loop
       overview.setSelection(ranges, true);
-      interactive_plot.setSelection(ranges);
+      interactive_plot.setSelection(ranges, true);
       stop_feed();
     });
 
@@ -233,20 +214,34 @@ $(function() {
       }
     });
 
-    function update_area() {
+    function update() {
+        // interactive and overviev plot
         interactive_plot.setData([getRandomData()["first"]]);
         overview.setData([getRandomData()["first"]]);
         // Since the axes don't change, we don't need to call plot.setupGrid()
         interactive_plot.draw();
         overview.draw();
+
+        // line plot
+        var data = [];
+
+        choiceContainer.find("input:checked").each(function () {
+          var key = $(this).attr("name");
+          if (key && getRandomData()[key]) {
+            data.push(getRandomData()[key]);
+          }
+        });
+
+        line_interactive.setData(data);
+        // Since the axes don't change, we don't need to call plot.setupGrid()
+        line_interactive.draw();
         if (realtime === "on")
-            setTimeout(update_area, updateInterval);
+            setTimeout(update, updateInterval);
     }
 
     //INITIALIZE REALTIME DATA FETCHING
     if (realtime === "on") {
-        update_area();
-        update_line();
+        update();
     }
 
     //REALTIME TOGGLE
@@ -257,8 +252,7 @@ $(function() {
         else {
             realtime = "off";
         }
-        update_area();
-        update_line();
+        update();
     });
 
     // Enable connection between the two graphs
@@ -276,14 +270,13 @@ $(function() {
 
       // don't fire event on the overview to prevent eternal loop
       overview.setSelection(ranges, true);
-      // line_interactive.setSelection(ranges, true);
+      line_interactive.setSelection(ranges);
       stop_feed();
     });
 
     $("#overview").bind("plotselected", function (event, ranges) {
       interactive_plot.setSelection(ranges);
       line_interactive.setSelection(ranges);
-      // stop the live feed
       stop_feed();
     });
 
@@ -303,7 +296,7 @@ $(function() {
       interactive_plot.setSelection(ranges);
       line_interactive.setSelection(ranges)
       overview.clearSelection();
-      // restart_feed();
+      restart_feed();
     });
 
     // helper functions
@@ -315,8 +308,7 @@ $(function() {
         });
       }
       realtime = "off";
-      update_area();
-      update_line();
+      update();
     }
 
     function restart_feed(){
@@ -326,8 +318,7 @@ $(function() {
         });
       }
       realtime = "on";
-      update_area();
-      update_line();
+      update();
     }
 
  //======================================================================
