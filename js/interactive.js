@@ -104,7 +104,7 @@ $(function() {
             color: "#00c0ef"
         },
         lines: {
-            fill: true //Converts the line chart to area chart                        
+            fill: true //Converts the line chart to area chart
         },
         yaxis: {
             min: 0,
@@ -300,7 +300,6 @@ $(function() {
         // Since the axes don't change, we don't need to call plot.setupGrid()
         line_interactive.draw();
 
-        
         area_interactive.setData([getRandomData()["second"]]);
         area_interactive.draw();
 
@@ -372,7 +371,7 @@ $(function() {
     });
 
     // helper functions
-    
+
     function stop_feed(){
       if(realtime == "on"){
         $('.btn-group[data-toggle="btn-toggle"]').each(function() {
@@ -394,7 +393,7 @@ $(function() {
     }
 
  //======================================================================
- //  BAR CHART  
+ //  BAR CHART
  //======================================================================
 
     var bar_data = {
