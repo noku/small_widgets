@@ -1,5 +1,12 @@
 $(function() {
 
+  // We use an inline data source in the example, usually data would
+  // be fetched from a server or other resource available
+  var data = [], data2 = [], totalPoints = 500, ypoints = 100;
+
+  var updateInterval = 30;  //Fetch data ever x milliseconds
+  var realtime = "on";        //If == to on then fetch data every x seconds. else stop fetching
+
  //======================================================================
  //   Helper function
  //======================================================================
@@ -47,15 +54,32 @@ $(function() {
     }
 
  //======================================================================
- //   Line Chart
+ //   FULL WIDTH STATIC AREA CHART   
  //======================================================================
 
-    // We use an inline data source in the example, usually data would
-    // be fetched from a server or other resource available
-    var data = [], data2 = [], totalPoints = 500, ypoints = 100;
+    var area_interactive = $.plot("#area-chart", [getRandomData()["second"]], {
+        grid: {
+            borderWidth: 0
+        },
+        series: {
+            shadowSize: 0, // Drawing is faster without shadows
+            color: "#00c0ef"
+        },
+        lines: {
+            fill: true //Converts the line chart to area chart                        
+        },
+        yaxis: {
+            show: false
+        },
+        xaxis: {
+            min: 0,
+            show: false
+        }
+    });
 
-    var updateInterval = 30;  //Fetch data ever x milliseconds
-    var realtime = "on";        //If == to on then fetch data every x seconds. else stop fetching
+ //======================================================================
+ //   Line Chart
+ //======================================================================
 
     // hard-code color indices to prevent them from shifting as
     // value are turned on/off
@@ -235,6 +259,11 @@ $(function() {
         line_interactive.setData(data);
         // Since the axes don't change, we don't need to call plot.setupGrid()
         line_interactive.draw();
+
+        
+        area_interactive.setData([getRandomData()["second"]]);
+        area_interactive.draw();
+
         if (realtime === "on")
             setTimeout(update, updateInterval);
     }
@@ -320,34 +349,6 @@ $(function() {
       realtime = "on";
       update();
     }
-
- //======================================================================
- //   FULL WIDTH STATIC AREA CHART   
- //======================================================================
-
-
-    $.plot("#area-chart", [getRandomData()["second"]], {
-        grid: {
-            borderWidth: 0
-        },
-        series: {
-            shadowSize: 0, // Drawing is faster without shadows
-            color: "#00c0ef"
-        },
-        lines: {
-            fill: true //Converts the line chart to area chart                        
-        },
-        yaxis: {
-            show: false
-        },
-        xaxis: {
-            show: false
-        }
-    });
-
-
-
-
 
  //======================================================================
  //   FULL WIDTH STATIC AREA CHART   
