@@ -4,7 +4,7 @@ $(function() {
   // be fetched from a server or other resource available
   var data = [], data2 = [], totalPoints = 500, ypoints = 100;
 
-  var updateInterval = 30;  //Fetch data ever x milliseconds
+  var updateInterval = 1000;  //Fetch data ever x milliseconds
   var realtime = "on";        //If == to on then fetch data every x seconds. else stop fetching
 
  //======================================================================
@@ -53,6 +53,44 @@ $(function() {
       return res;
     }
 
+   // generate random data numbers
+    function getRandomDataDonut() {
+      var one = Math.random() * 100,
+          two = 100 - one;
+
+      var donutData = [
+        {label: "Series1", data: one, color: "#3c8dbc"},
+        {label: "Series2", data: two, color: "#0073b7"},
+        // {label: "Series4", data: 50, color: "#00c0ef"}
+      ];
+
+      return donutData;
+    }
+
+ //======================================================================
+ // DONUT CHART 
+ //======================================================================
+
+    var donut_interactive = $.plot("#donut-chart", getRandomDataDonut(), {
+        series: {
+            pie: {
+                show: true,
+                radius: 1,
+                innerRadius: 0.5,
+                label: {
+                    show: true,
+                    radius: 2 / 3,
+                    formatter: labelFormatter,
+                    threshold: 0.1
+                }
+
+            }
+        },
+        legend: {
+            show: false
+        }
+    });
+
  //======================================================================
  //   FULL WIDTH STATIC AREA CHART   
  //======================================================================
@@ -69,6 +107,8 @@ $(function() {
             fill: true //Converts the line chart to area chart                        
         },
         yaxis: {
+            min: 0,
+            max: 100,
             show: false
         },
         xaxis: {
@@ -264,6 +304,9 @@ $(function() {
         area_interactive.setData([getRandomData()["second"]]);
         area_interactive.draw();
 
+        // donut_interactive.setData(getRandomDataDonut);
+        // donut_interactive.draw();
+
         if (realtime === "on")
             setTimeout(update, updateInterval);
     }
@@ -351,12 +394,8 @@ $(function() {
     }
 
  //======================================================================
- //   FULL WIDTH STATIC AREA CHART   
+ //  BAR CHART  
  //======================================================================
-    /*
-     * BAR CHART
-     * ---------                 
-     */
 
     var bar_data = {
         data: [["January", 10], ["February", 8], ["March", 4], ["April", 13], ["May", 17], ["June", 9]],
@@ -380,40 +419,6 @@ $(function() {
             tickLength: 0
         }
     });
-    /* END BAR CHART */
-
-    /*
-     * DONUT CHART
-     * -----------
-     */
-
-    var donutData = [
-        {label: "Series2", data: 30, color: "#3c8dbc"},
-        {label: "Series3", data: 20, color: "#0073b7"},
-        {label: "Series4", data: 50, color: "#00c0ef"}
-    ];
-    $.plot("#donut-chart", donutData, {
-        series: {
-            pie: {
-                show: true,
-                radius: 1,
-                innerRadius: 0.5,
-                label: {
-                    show: true,
-                    radius: 2 / 3,
-                    formatter: labelFormatter,
-                    threshold: 0.1
-                }
-
-            }
-        },
-        legend: {
-            show: false
-        }
-    });
-    /*
-     * END DONUT CHART
-     */
 
 });
 
