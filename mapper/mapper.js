@@ -1,8 +1,9 @@
-(function(window, google){
+(function(window, google, List){
 
   var Mapper = (function(){
     function Mapper(element, opts){
       this.gMap = new google.maps.Map(element, opts);
+      this.markers = List.create();
     }
 
     Mapper.prototype = {
@@ -21,6 +22,7 @@
           lng : opts.lng
         }
         marker = this._createMarker(opts);
+        this.markers.add(marker);
         if(opts.event){
           this._on({
             obj: marker,
@@ -45,6 +47,18 @@
         }
       },
 
+      findBy: function(callback){
+        return this.markers.find(callback);
+      },
+
+      removeBy: function(callback){
+        return this.markers.find(callback, function(markers){
+          markers.forEach(function(marker){
+            marker.setMap(null);
+          })
+        })
+      },
+
       _createMarker: function(opts){
         opts.map = this.gMap;
         return new google.maps.Marker(opts);
@@ -60,7 +74,7 @@
 
   window.Mapper = Mapper;
 
-}(window, google))
+}(window, google, List))
 
 // for more information visit 
 // https://developers.google.com/maps/documentation/javascript/reference
