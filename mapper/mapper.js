@@ -4,6 +4,7 @@
     function Mapper(element, opts){
       this.gMap = new google.maps.Map(element, opts);
       this.markers = List.create();
+      this.markerClusterer = new MarkerClusterer(this.gMap, []);
     }
 
     Mapper.prototype = {
@@ -22,6 +23,7 @@
           lng : opts.lng
         }
         marker = this._createMarker(opts);
+        this.markerClusterer.addMarker(marker);
         this.markers.add(marker);
         if(opts.event){
           this._on({
@@ -32,7 +34,6 @@
         }
 
         if(opts.content){
-
            this._on({
               obj: marker,
               event: 'click',
@@ -52,9 +53,14 @@
       },
 
       removeBy: function(callback){
-        return this.markers.find(callback, function(markers){
+        var self = this;
+        return self.markers.find(callback, function(markers){
           markers.forEach(function(marker){
-            marker.setMap(null);
+            if(self.markerClusterer){
+              self.markerClusterer.removeMarker(marker);
+            } else {
+              marker.setMap(null);            
+            }
           })
         })
       },
