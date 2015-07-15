@@ -4,7 +4,9 @@
     function Mapper(element, opts){
       this.gMap = new google.maps.Map(element, opts);
       this.markers = List.create();
-      this.markerClusterer = new MarkerClusterer(this.gMap, []);
+      if(opts.cluster){
+        this.markerClusterer = new MarkerClusterer(this.gMap, []);
+      }
     }
 
     Mapper.prototype = {
@@ -23,7 +25,9 @@
           lng : opts.lng
         }
         marker = this._createMarker(opts);
-        this.markerClusterer.addMarker(marker);
+        if(this.markerClusterer){
+          this.markerClusterer.addMarker(marker);
+        }
         this.markers.add(marker);
         if(opts.events){
           this._attachEvents(marker, opts.events);

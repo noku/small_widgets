@@ -11,14 +11,15 @@
     draggable: true,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     maxZoom: 15,
-    minZoom: 9,
+    // minZoom: 9,
     zoomControlOptions: {
       position: google.maps.ControlPosition.LEFT_BOTTOM,
       style: google.maps.ZoomControlStyle.DEFAULT
     },
     positionOptions: {
       position: google.maps.ControlPosition.LEFT_BOTTOM
-    }
+    },
+    cluster: false
   }
 
   mapper.EXAMPLE_INFO = '<div id="content">'+

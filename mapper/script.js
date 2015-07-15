@@ -1,31 +1,21 @@
-(function(window, google, mapper) {
+(function(window, $) {
   
-  var options = mapper.MAP_OPTIONS,
-      element = document.getElementById('map-canvas'),
-      map = mapper.create(element, options);
+  var mapper = $('#map-canvas').mapper(Mapper.MAP_OPTIONS);
 
-  map.addMarker({
-    id: 2,
+  mapper.mapper("addMarker", {
+    id: 1,
     lat: 37.791350,
     lng: -122.435883,
-    draggable: true,
-    events: [{
-      name: "click",
-      callback: function(e){
-        console.log("click");
-      }
-    },
-    {
-      name: "dragend",
-      callback: function(e){
-        console.log("dragged");
-      }
-    }
-    ],
-
     content: mapper.EXAMPLE_INFO,
-    icon: "http://mapicons.nicolasmollet.com/wp-content/uploads/mapicons/shape-default/color-9d7050/shapecolor-color/shadow-1/border-dark/symbolstyle-white/symbolshadowstyle-dark/gradient-no/pickup_camper.png"
+    icon: "http://mapicons.nicolasmollet.com/wp-content/uploads/mapicons/shape-default/color-9d7050/shapecolor-color/shadow-1/border-dark/symbolstyle-white/symbolshadowstyle-dark/gradient-no/pickup_camper.png"  
   });
-  
 
-}(window, google, window.Mapper))
+  mapper.mapper("addMarker", {
+    id: 1,
+    lat: 37.79920,
+    lng: -122.435883,
+    content: mapper.EXAMPLE_INFO,
+    icon: "http://mapicons.nicolasmollet.com/wp-content/uploads/mapicons/shape-default/color-9d7050/shapecolor-color/shadow-1/border-dark/symbolstyle-white/symbolshadowstyle-dark/gradient-no/pickup_camper.png"  
+  });
+
+}(window, jQuery ))
