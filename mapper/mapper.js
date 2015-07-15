@@ -25,12 +25,8 @@
         marker = this._createMarker(opts);
         this.markerClusterer.addMarker(marker);
         this.markers.add(marker);
-        if(opts.event){
-          this._on({
-            obj: marker,
-            event: opts.event.name,
-            callback: opts.event.callback
-          })
+        if(opts.events){
+          this._attachEvents(marker, opts.events);
         }
 
         if(opts.content){
@@ -59,10 +55,21 @@
             if(self.markerClusterer){
               self.markerClusterer.removeMarker(marker);
             } else {
-              marker.setMap(null);            
+              marker.setMap(null);
             }
           })
         })
+      },
+
+      _attachEvents: function(obj, events){
+        var self = this;
+        events.forEach(function(event){
+          self._on({
+            obj: obj,
+            event: event.name,
+            callback: event.callback
+          });
+        });
       },
 
       _createMarker: function(opts){
