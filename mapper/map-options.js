@@ -19,6 +19,7 @@
     positionOptions: {
       position: google.maps.ControlPosition.LEFT_BOTTOM
     },
+    geocoder: true,
     cluster: false
   }
 

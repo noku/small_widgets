@@ -5,12 +5,15 @@
       this.gMap = new google.maps.Map(element, opts);
       this.markers = List.create();
       if(opts.cluster){
-        this.markerClusterer = new MarkerClusterer(this.gMap, []);
+        this.markerClusterer = new MarkerClusterer(this.gMap, []);        
+      }
+      if(opts.geocoder){
+        this.geocoder = new google.maps.Geocoder();
       }
     }
 
     Mapper.prototype = {
-
+      
       _on : function(opts){
         var self = this;
         google.maps.event.addListener(opts.obj, opts.event, function(e){
@@ -26,7 +29,7 @@
         }
         marker = this._createMarker(opts);
         if(this.markerClusterer){
-          this.markerClusterer.addMarker(marker);
+          this.markerClusterer.addMarker(marker);         
         }
         this.markers.add(marker);
         if(opts.events){
@@ -59,12 +62,24 @@
             if(self.markerClusterer){
               self.markerClusterer.removeMarker(marker);
             } else {
-              marker.setMap(null);
+              marker.setMap(null);            
             }
           })
         })
       },
 
+      geocode: function(opts){
+        this.geocoder.geocode({
+          address: opts.address
+        }, function(results, status){
+          if(status === google.maps.GeocoderStatus.OK){
+            opts.success.call(this, results, status);
+          } else {
+            opts.error.call(this,status);
+          }
+        });
+      },
+      
       _attachEvents: function(obj, events){
         var self = this;
         events.forEach(function(event){
@@ -73,7 +88,7 @@
             event: event.name,
             callback: event.callback
           });
-        });
+        });        
       },
 
       _createMarker: function(opts){
