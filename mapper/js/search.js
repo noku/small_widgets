@@ -1,9 +1,12 @@
 $(function() {
-  var availableTags = [
-    "Moto",
-    "Truck",
-    "Hummer"
-  ];
+
+  var availableTags = [],
+      db = DB.create("maps");
+
+  db.MARKERS.forEach(function(marker){
+    availableTags.push(marker.name);        
+  });
+
   $( "#marker" ).autocomplete({
     source: availableTags
   });

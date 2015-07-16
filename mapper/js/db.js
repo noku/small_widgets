@@ -22,7 +22,8 @@
   for (var i = 0; i < 35; i++) {
     TEMP.push({
       id: 1,
-      name: "Moto",
+      animation: google.maps.Animation.DROP,
+      name: "Moto" + String(i+1),
       lat: 30 + Math.floor((Math.random() * 18) + 1),
       lng: -115 + Math.floor((Math.random() * 28) + 1),
       content: DESC,
@@ -34,7 +35,8 @@
   for (var i = 0; i < 35; i++) {
     TEMP.push({
       id: 1,
-      name: "Hummer",
+      animation: google.maps.Animation.DROP,
+      name: "Hummer" + String(i+1),
       lat: 0 + Math.floor((Math.random() * 25) + 1),
       lng: 0 + Math.floor((Math.random() * 30) + 1),
       content: DESC,
@@ -46,7 +48,8 @@
   for (var i = 0; i < 50; i++) {
     TEMP.push({
       id: 1,
-      name: "Truck",
+      animation: google.maps.Animation.DROP,
+      name: "Truck" + String(i+1),
       lat: 45 + Math.floor((Math.random() * 20) + 1),
       lng: 40 + Math.floor((Math.random() * 100) + 1),
       content: DESC,
