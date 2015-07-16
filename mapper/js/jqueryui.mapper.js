@@ -33,6 +33,10 @@
       }
     },
 
+    getMap: function(){
+      return this.map.gMap;
+    },
+
     findMarkers: function(callback) {
       return this.map.findBy(callback);
     },

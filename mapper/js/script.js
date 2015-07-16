@@ -7,4 +7,6 @@
     mapper.mapper("addMarker", marker)
   });
 
+  window.mapper = mapper;
+
 }(window, jQuery, DB))
