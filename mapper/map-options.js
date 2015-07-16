@@ -34,10 +34,10 @@
 
   mapper.MAP_OPTIONS = {
     center: {
-      lat: 37.791350,
-      lng: -122.435883
+      lat: 0,
+      lng: 0
     },
-    zoom: 10,
+    zoom: 2,
     disableDefaultUI: false,
     scroolwheel: true,
     draggable: true,

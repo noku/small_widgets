@@ -1,13 +1,10 @@
-(function(window, $) {
+(function(window, $, DB) {
   
-  var mapper = $('#map-canvas').mapper(Mapper.MAP_OPTIONS);
+  var mapper = $('#map-canvas').mapper(Mapper.MAP_OPTIONS),
+      db = DB.create("maps");
 
-  mapper.mapper("addMarker", {
-    id: 1,
-    lat: 37.791350,
-    lng: -122.435883,
-    content: mapper.EXAMPLE_INFO,
-    icon: "http://mapicons.nicolasmollet.com/wp-content/uploads/mapicons/shape-default/color-9d7050/shapecolor-color/shadow-1/border-dark/symbolstyle-white/symbolshadowstyle-dark/gradient-no/pickup_camper.png"  
+  db.MARKERS.forEach(function(marker){
+    mapper.mapper("addMarker", marker)
   });
 
-}(window, jQuery ))
+}(window, jQuery, DB))
