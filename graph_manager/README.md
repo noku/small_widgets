@@ -12,10 +12,10 @@ Necessary to write a script, it is best to adapt a ready one (best anything on d
 
 ## Available graphs
 
-![Graphs](https://github.com/noku/graph_manager/blob/master/img/screen1.png)
+![Graphs](https://github.com/noku/small_widgets/blob/master/graph_manager/img/screen1.png)
 
-![Graphs](https://github.com/noku/graph_manager/blob/master/img/screen2.png)
+![Graphs](https://github.com/noku/small_widgets/blob/master/graph_manager/img/screen2.png)
 
-![Graphs](https://github.com/noku/graph_manager/blob/master/img/screen3.png)
+![Graphs](https://github.com/noku/small_widgets/blob/master/graph_manager/img/screen3.png)
 
-![Graphs](https://github.com/noku/graph_manager/blob/master/img/screen4.png)
+![Graphs](https://github.com/noku/small_widgets/blob/master/graph_manager/img/screen4.png)
