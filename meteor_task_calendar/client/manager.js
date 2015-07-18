@@ -16,8 +16,12 @@ Template.contManager.rendered = function(){
 
 Template.contManager.events({
   'click #add-new-event': function(e, template){
-      var currColor = "#f56954"; //Red by default
-      currColor = $("#color-chooser-btn").css("background-color");
+      // get the choosen color
+      var currColor = $("#color-chooser-btn").text().trim().toLowerCase();
+
+      if(currColor=="color"){
+        currColor = "red"; // red default color
+      }
 
       e.preventDefault();
       //Get value and make sure it is not null
@@ -25,20 +29,21 @@ Template.contManager.events({
       if (val.length == 0) {
           return;
       }
-
+      
       //Create event
-      var event = $("<div />");
-      event.css({"background-color": currColor, "border-color": currColor, "color": "#fff"}).addClass("external-event");
-      event.html(val);
-      $('#external-events').prepend(event);
+      Events.insert({title: val, color: currColor});
 
-      //Add draggable funtionality
-      ini_events(event);
+      // //Add draggable funtionality
+      ini_events($('#external-events div.external-event').last());
 
       //Remove event from text input
       $("#new-event").val("");
   }
 });
+
+Template.contManager.Events = function(){
+  return Events.find();
+}
 
 /* helper function initialize draggable elenments
  -----------------------------------------------------------------*/
