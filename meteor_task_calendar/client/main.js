@@ -1,3 +1,6 @@
+Session.setDefault("showEditEvent", false);
+Session.setDefault("event_id", null);
+
 Template.calendar.rendered = function() {
 
     /* initialize the external events
@@ -25,53 +28,27 @@ Template.calendar.rendered = function() {
             week: 'week',
             day: 'day'
         },
+        eventClick: function(callEvent,jsEvent,view){
+            Session.set('event_id', callEvent.id);
+            Session.set('showEditEvent', true);
+        },
         //Random default events
-        events: [
-            {
-                title: 'All Day Event',
-                start: new Date(y, m, 1),
-                backgroundColor: "#f56954", //red 
-                borderColor: "#f56954" //red
-            },
-            {
-                title: 'Long Event',
-                start: new Date(y, m, d - 5),
-                end: new Date(y, m, d - 2),
-                backgroundColor: "#f39c12", //yellow
-                borderColor: "#f39c12" //yellow
-            },
-            {
-                title: 'Meeting',
-                start: new Date(y, m, d, 10, 30),
-                allDay: false,
-                backgroundColor: "#0073b7", //Blue
-                borderColor: "#0073b7" //Blue
-            },
-            {
-                title: 'Lunch',
-                start: new Date(y, m, d, 12, 0),
-                end: new Date(y, m, d, 14, 0),
-                allDay: false,
-                backgroundColor: "#00c0ef", //Info (aqua)
-                borderColor: "#00c0ef" //Info (aqua)
-            },
-            {
-                title: 'Birthday Party',
-                start: new Date(y, m, d + 1, 19, 0),
-                end: new Date(y, m, d + 1, 22, 30),
-                allDay: false,
-                backgroundColor: "#00a65a", //Success (green)
-                borderColor: "#00a65a" //Success (green)
-            },
-            {
-                title: 'Click for Google',
-                start: new Date(y, m, 28),
-                end: new Date(y, m, 29),
-                url: 'http://google.com/',
-                backgroundColor: "#3c8dbc", //Primary (light-blue)
-                borderColor: "#3c8dbc" //Primary (light-blue)
-            }
-        ],
+        events: function(start, end, callback) {
+          var events = [];
+          callEvents = CallEvents.find();
+          callEvents.forEach(function(evt){
+            events.push({
+              id: evt._id,
+              title: evt.title,
+              start: evt.start,
+              end: evt.end,
+              allDay: evt.allDay,
+              backgroundColor:  evt.backgroundColor,
+              borderColor: evt.borderColor
+            });
+          });
+          callback(events);
+        },
         editable: true,
         droppable: true, // this allows things to be dropped onto the calendar !!!
         drop: function(date, allDay) { // this function is called when something is dropped
@@ -88,6 +65,9 @@ Template.calendar.rendered = function() {
             copiedEventObject.backgroundColor = $(this).css("background-color");
             copiedEventObject.borderColor = $(this).css("border-color");
 
+            // add calendar events
+            CallEvents.insert(copiedEventObject);
+
             // render the event on the calendar
             // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
             $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
@@ -95,9 +75,38 @@ Template.calendar.rendered = function() {
             // is the "remove after drop" checkbox checked?
             if ($('#drop-remove').is(':checked')) {
                 // if so, remove the element from the "Draggable Events" list
-                $(this).remove();
+                // remove the ellement
+                var id = Events.findOne({title: copiedEventObject.title})._id;
+                Events.remove(id);
             }
-
+        },
+        eventDrop: function(callEvent){
+            CallEvents.update(callEvent.id, {$set: {start: callEvent.start, end: callEvent.end}})
         }
     });
+}
+
+Template.calendar.showEditEvent = function(){
+    return Session.get('showEditEvent');
+}
+
+Template.editEvent.evt = function() {
+    var callevent= CallEvents.findOne({_id: Session.get("event_id")});
+    return callevent;
+}
+
+Template.editEvent.events({
+    'click .save': function(e, template){
+        upadateCallEvent(Session.get('event_id'), template.find('.title').value);
+        Session.set('event_id', null);
+        Session.set('showEditEvent', false);
+    },
+    'click .close':function(e, template){
+        Session.set('showEditEvent', false);
+    }
+});
+
+var upadateCallEvent = function(id, title){
+    CallEvents.update(id, {$set: {title:title}});
+    return true;
 }
