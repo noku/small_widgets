@@ -1,5 +1,6 @@
 Session.setDefault("showEditEvent", false);
 Session.setDefault("event_id", null);
+Session.setDefault("event", null);
 
 Template.calendar.rendered = function() {
 
@@ -29,6 +30,7 @@ Template.calendar.rendered = function() {
             day: 'day'
         },
         eventClick: function(callEvent,jsEvent,view){
+            Session.set('event', callEvent);
             Session.set('event_id', callEvent.id);
             Session.set('showEditEvent', true);
         },
@@ -81,7 +83,10 @@ Template.calendar.rendered = function() {
             }
         },
         eventDrop: function(callEvent){
-            CallEvents.update(callEvent.id, {$set: {start: callEvent.start, end: callEvent.end}})
+            CallEvents.update(callEvent.id, {$set: {start: callEvent.start, end: callEvent.end, allDay: callEvent.allDay }})
+        },
+        eventResize: function(callEvent){
+            CallEvents.update(callEvent.id, {$set: {start: callEvent.start, end: callEvent.end, allDay: callEvent.allDay }})
         }
     });
 }
@@ -97,12 +102,28 @@ Template.editEvent.evt = function() {
 
 Template.editEvent.events({
     'click .save': function(e, template){
-        upadateCallEvent(Session.get('event_id'), template.find('.title').value);
+        // need improvement
+        var temp_event = Session.get('event'),
+            title = template.find('.title').value;
+        upadateCallEvent(Session.get('event_id'), title);
+        temp_event.title = title;
+        $('#calendar').fullCalendar('updateEvent', temp_event);
+        Session.set('event', null);
         Session.set('event_id', null);
         Session.set('showEditEvent', false);
     },
     'click .close':function(e, template){
         Session.set('showEditEvent', false);
+    },
+    'click .delete':function(e, template){
+        // temporary
+        var temp_event = Session.get('event');
+        temp_event.start = 0;
+        CallEvents.remove(Session.get('event_id'));
+        Session.set('event', temp_event);
+        Session.set('event_id', null);
+        Session.set('showEditEvent', false);
+        $('#calendar').fullCalendar('updateEvent', temp_event);
     }
 });
 
